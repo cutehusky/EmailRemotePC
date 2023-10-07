@@ -12,12 +12,11 @@ USER_PASSWORD = variables.USER_PASSWORD
 
 
 def main():
-    send_mail_success_execution('khuuthanhthien269@gmail.com',
-                                'testing...', 'screenshots\screenshot_2023-10-06_23-17-18.png')
+    pass
 
 
 def send_mail_success_execution(recipient_mail, command, filename=None):
-    print('Command executed successfully:', command)
+    print('\nCommand executed successfully:', command)
     print('Sending email...')
     msg = MIMEMultipart()
     msg['From'] = USER_EMAIL

@@ -60,8 +60,11 @@ def decode_mail(msg):
     for part in msg.walk():
         if part.get_content_type() == 'text/plain':
             content = part.get_payload(decode=True).decode('utf-8')
-            cmd_list.append(content)
-            print(content)
+            content = content.split('\r\n')
+            for message in content:
+                if message != '':
+                    cmd_list.append(message)
+                    print(message)
     return cmd_list  # one string or list of strings (unstripped)
 
 
