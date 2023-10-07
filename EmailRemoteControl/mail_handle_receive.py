@@ -2,6 +2,12 @@ import imaplib
 import email
 import datetime
 import time
+import variables
+
+USER_EMAIL = variables.USER_EMAIL
+USER_PASSWORD = variables.USER_PASSWORD
+imap_address = variables.imap_address
+imap_port = variables.imap_port
 
 
 def main():
@@ -19,12 +25,7 @@ def main():
 
 def get_mail_object():
 
-    USER_EMAIL = 'dummymailbox5186@gmail.com'
-    USER_PASSWORD = "omwv msnm mxbx wllh"
-    host_address = 'imap.gmail.com'
-    host_port = 993  # SSL 993, TLS 143
-
-    mail = imaplib.IMAP4_SSL(host_address, host_port)
+    mail = imaplib.IMAP4_SSL(imap_address, imap_port)
     print("Connected to gmail...")
     mail.login(USER_EMAIL, USER_PASSWORD)
     print("Logged in...")
@@ -46,9 +47,10 @@ def get_mail_object():
         # data type: bytes, decode = utf-8
         msg = email.message_from_bytes(data[0][1])
         msg_list.append(msg)
-        mail.store(num, '+FLAGS', '\\Seen') #UNSEEN -> SEEN
+        mail.store(num, '+FLAGS', '\\Seen')  # UNSEEN -> SEEN
     mail.close()
     return msg_list
+
 
 def decode_mail(msg):
     cmd_list = []
@@ -60,7 +62,8 @@ def decode_mail(msg):
             content = part.get_payload(decode=True).decode('utf-8')
             cmd_list.append(content)
             print(content)
-    return cmd_list # one string or list of strings (unstripped)
+    return cmd_list  # one string or list of strings (unstripped)
+
 
 if __name__ == "__main__":
     main()
