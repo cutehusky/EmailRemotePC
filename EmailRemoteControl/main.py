@@ -47,6 +47,9 @@ def request_handle(msg_list):
                     mail_handle_send.send_mail_success_execution(
                         recipient_mail, cmd)
                     function_map[cmd]()
+                elif cmd == 'help':
+                    mail_handle_send.send_mail_success_execution(
+                        recipient_mail, cmd)
                 else:
                     function_map[cmd]()
                     mail_handle_send.send_mail_success_execution(
