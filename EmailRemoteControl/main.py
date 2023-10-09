@@ -80,14 +80,6 @@ def main():
 if __name__ == "__main__":
     try:
         main()
-    # packages not found
-    except ModuleNotFoundError:
-        print("Installing nessary packages")
-        os.system("pip install -r packages.txt")
-        main()
     except KeyboardInterrupt:
         print("\nExited")
-        os.system("pause")
-    except Exception as e:
-        print(e)
         os.system("pause")

@@ -14,9 +14,20 @@ __Mail content:__
 ## Requirements
 - __Python 3.10__ or newer
 - __Libraries:__
-    1. pyautogui
-    2. pynput
-
+    
+    _- pyautogui_
+    ```
+    pip install pyautogui
+    ```
+    _- pynput_
+    ```
+    pip install pynput
+    ```
+    _- psutil_
+    ```
+    pip install psutil
+    ```
+    
 - __OS__ : Windows
 ## NOTE
 _Please allow keylogr.py on Windows Security settings as the system automatically detects this file as a thread_
