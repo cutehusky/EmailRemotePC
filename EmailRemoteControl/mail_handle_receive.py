@@ -23,18 +23,20 @@ def main():
         time.sleep(10)
 
 
-def get_mail_object():
-
+def login():
     mail = imaplib.IMAP4_SSL(imap_address, imap_port)
     print("Connected to gmail...")
     mail.login(USER_EMAIL, USER_PASSWORD)
     print("Logged in...")
+    return mail
+
+
+def get_mail_object(mail):
 
     # modifiable
     mailbox = 'inbox'  # types: inbox, sent, draft, trash, spam
     mail.select(mailbox)
     print(f'Current mailbox: {mailbox}')
-
     # types: ALL, UNSEEN, SEEN, ANSWERED, DELETED, UNDELETED, FLAGGED, UNFLAGGED, DRAFT, UNDRAFT
     # custom subject: '(SUBJECT "[subject here]")'
     _, data = mail.search(None, '(UNSEEN SUBJECT "[Remote Control Command]")')

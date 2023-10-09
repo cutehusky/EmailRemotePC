@@ -67,11 +67,12 @@ def request_handle(msg_list):
 
 
 def main():
+    mail = mail_handle_receive.login()
     while True:
         now = datetime.datetime.now()
         timestamp = '\n> > > >[ '+now.strftime("%H:%M:%S") + ' ]< < < <\n'
         print(timestamp)
-        msg_list = mail_handle_receive.get_mail_object()
+        msg_list = mail_handle_receive.get_mail_object(mail)
         request_handle(msg_list)
         time.sleep(10)
 
