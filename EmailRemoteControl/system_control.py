@@ -1,12 +1,13 @@
 import os
 import time
+import cv2
+from shutil import move
 import pyautogui
 import datetime
 
 
 def main():
-    screenshot()
-    print("Screenshot taken")
+    print(webcam_image())
 
 
 def countdown(duration):
@@ -24,10 +25,24 @@ def screenshot(tmp=None):
     # file name: screenshot_YYYY-MM-DD_HH-MM-SS.png
     filename = "screenshot_" + now.strftime("%Y-%m-%d_%H-%M-%S") + ".png"
     source_dir = os.path.dirname(os.path.abspath(__file__)) + "/screenshots/"
-    if not os.path.exists(source_dir):
-        os.mkdir(source_dir)
+    os.makedirs(source_dir, exist_ok=True)
     filename = "screenshots/" + filename
     scrshot.save(filename)
+    return filename
+
+
+def webcam_image(tmp=None):
+
+    cap = cv2.VideoCapture(0)
+    _, frame = cap.read()
+    cap.release()
+
+    now = datetime.datetime.now()
+    filename = "webcam_" + now.strftime("%Y-%m-%d_%H-%M-%S") + ".jpg"
+    source_dir = os.path.dirname(os.path.abspath(__file__)) + "\\webcam\\"
+    os.makedirs(source_dir, exist_ok=True)
+    filename = source_dir + filename
+    cv2.imwrite(filename, frame)
     return filename
 
 

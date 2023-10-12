@@ -9,8 +9,9 @@ __Mail content:__
 1. List Apps (start/stop)
 2. List proccess (start/stop)
 3. `screenshot` - Take a screenshot
-4. `keylog` - Perform keylog for an amount of time (default 15s)
-5. `shutdown` - Turn off computer
+4. `webcam` - Take a picture using built-in webcam 
+5. `keylog` - Perform keylog for an amount of time (default 15s)
+6. `shutdown` - Turn off computer
 ## Requirements
 - __Python 3.10__ or newer
 - __Libraries:__
@@ -26,6 +27,10 @@ __Mail content:__
     _- psutil_
     ```
     pip install psutil
+    ```
+    _- openCV_
+    ```
+    pip install opencv-python
     ```
     
 - __OS__ : Windows

