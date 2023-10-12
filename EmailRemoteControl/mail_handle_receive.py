@@ -3,6 +3,7 @@ import email
 import datetime
 import time
 import variables
+import re
 
 USER_EMAIL = variables.USER_EMAIL
 USER_PASSWORD = variables.USER_PASSWORD
@@ -36,7 +37,6 @@ def get_mail_object(mail):
     # modifiable
     mailbox = 'inbox'  # types: inbox, sent, draft, trash, spam
     mail.select(mailbox)
-    print(f'Current mailbox: {mailbox}')
     # types: ALL, UNSEEN, SEEN, ANSWERED, DELETED, UNDELETED, FLAGGED, UNFLAGGED, DRAFT, UNDRAFT
     # custom subject: '(SUBJECT "[subject here]")'
     _, data = mail.search(None, '(UNSEEN SUBJECT "[Remote Control Command]")')
@@ -57,7 +57,9 @@ def get_mail_object(mail):
 def decode_mail(msg):
     cmd_list = []
     print('-------------------------')
-    print('From:', msg["From"])
+    # print('From:', msg["From"])
+    From = re.search(r'[\w\.-]+@[\w\.-]+', msg['From']).group()
+    print('From:', From)
     print('Content:')
     for part in msg.walk():
         if part.get_content_type() == 'text/plain':

@@ -7,6 +7,7 @@ import resource_monitor
 import time
 import re
 import os
+import multiprocessing
 
 
 def shutdown():
@@ -34,7 +35,6 @@ function_map = {
 
 def request_handle(msg_list):
     if msg_list == None:
-        print("No new command")
         return
     for msg in msg_list:
         recipient_mail = re.search(r'[\w\.-]+@[\w\.-]+', msg['From']).group()
@@ -66,15 +66,30 @@ def request_handle(msg_list):
                     recipient_mail, cmd)
 
 
+def waiting(message):
+    print('', end='\r')
+    # icon = ['◢', '◣', '◤', '◥']
+    icon = ['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█']
+    n = len(icon)
+    for i in range(n):
+        print(f'{message} {icon[i]}', end='\r')
+        time.sleep(0.2)
+    for i in range(n):
+        print(f'{message} {icon[n-1-i]}', end='\r')
+        time.sleep(0.2)
+
+
 def main():
     mail = mail_handle_receive.login()
     while True:
-        now = datetime.datetime.now()
-        timestamp = '\n> > > >[ '+now.strftime("%H:%M:%S") + ' ]< < < <\n'
-        print(timestamp)
         msg_list = mail_handle_receive.get_mail_object(mail)
-        request_handle(msg_list)
-        time.sleep(10)
+        if msg_list == None:
+            waiting('Waiting for command')
+        else:
+            now = datetime.datetime.now()
+            timestamp = '\n> > > >[ '+now.strftime("%H:%M:%S") + ' ]< < < <\n'
+            print(timestamp)
+            request_handle(msg_list)
 
 
 if __name__ == "__main__":

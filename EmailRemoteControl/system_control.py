@@ -18,16 +18,18 @@ def countdown(duration):
         duration -= 1
 
 
-def screenshot(tmp = None):
+def screenshot(tmp=None):
     scrshot = pyautogui.screenshot()
     now = datetime.datetime.now()
-    #file name: screenshot_YYYY-MM-DD_HH-MM-SS.png
+    # file name: screenshot_YYYY-MM-DD_HH-MM-SS.png
     filename = "screenshot_" + now.strftime("%Y-%m-%d_%H-%M-%S") + ".png"
-    if not os.path.exists("screenshots"):
-        os.mkdir("screenshots")
+    source_dir = os.path.dirname(os.path.abspath(__file__)) + "/screenshots/"
+    if not os.path.exists(source_dir):
+        os.mkdir(source_dir)
     filename = "screenshots/" + filename
     scrshot.save(filename)
     return filename
+
 
 if __name__ == "__main__":
     main()
