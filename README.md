@@ -36,3 +36,5 @@ __Mail content:__
 - __OS__ : Windows
 ## NOTE
 _Please allow keylogr.py on Windows Security settings as the system automatically detects this file as a thread_
+_ffmpeg.exe build by:_
+__https://github.com/GyanD/codexffmpeg/releases/download/6.0/ffmpeg-6.0-essentials_build.zip__
