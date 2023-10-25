@@ -59,7 +59,7 @@ def success_message(command):
         <tr>
             <td>
             <h1 style="text-align: center;">COMMAND SUCCESSFULLY EXECUTED</h1>
-            <h1 style="text-align: center;">{[[command]]}</h1>
+            <h1 style="text-align: center;">{command}</h1>
             <img style="display: block; margin: 0 auto; border-radius: 22px" src="cid:image1" alt="image1">
             </td>
         </tr>
@@ -77,7 +77,7 @@ def failure_message(command):
         <tr>
             <td>
             <h1 style="text-align: center;">COMMAND FAILED TO EXECUTE</h1>
-            <h1 style="text-align: center;">{[[command]]}</h1>
+            <h1 style="text-align: center;">{command}</h1>
             <p style="text-align: center; font-size: 20px">Here's a croc instead</p>
             <img style="display: block; margin: 0 auto; border-radius: 22px" src="cid:image1" width="300" height="300" alt="croc">
             </td>
