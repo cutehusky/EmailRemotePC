@@ -1,7 +1,5 @@
 import imaplib
 import email
-import datetime
-import time
 import variables
 import re
 
@@ -12,16 +10,7 @@ imap_port = variables.imap_port
 
 
 def main():
-    while True:
-        now = datetime.datetime.now()
-        timestamp = '\n>> > >[ '+now.strftime("%H:%M:%S") + ' ]< < <<\n'
-        print(timestamp)
-        msg_list = get_mail_object()
-        cmd_list = decode_mail(msg_list)
-        if cmd_list != None:
-            for cmd in cmd_list:
-                print(cmd)
-        time.sleep(10)
+    print(variables.USER_EMAIL)
 
 
 def login():

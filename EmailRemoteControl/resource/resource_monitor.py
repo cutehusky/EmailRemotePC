@@ -27,9 +27,8 @@ def getAppInfo():
 
 
 def main():
-    processes = list_processes()
-    print(processes)
     appinfo = getAppInfo()
     print(appinfo)
+    kill_process('kill_process '+input("pid:"))
 if __name__ == "__main__":
     main()
