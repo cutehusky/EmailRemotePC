@@ -8,7 +8,7 @@ import re
 
 
 def login():
-    mail = imaplib.IMAP4_TLS(imap_address, imap_port)
+    mail = imaplib.IMAP4_SSL(imap_address, imap_port)
     print("Connected to gmail...")
     mail.login(USER_EMAIL, USER_PASSWORD)
     print("Logged in...")

