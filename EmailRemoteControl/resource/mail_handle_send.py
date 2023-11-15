@@ -2,17 +2,12 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
-import variables
+try:
+    from resource.variables import *
+except ModuleNotFoundError:
+    from variables import *
 from os import path
 
-smtp_host = variables.smtp_host
-smtp_port = variables.smtp_port
-USER_EMAIL = variables.USER_EMAIL
-USER_PASSWORD = variables.USER_PASSWORD
-
-
-def main():
-    pass
 
 def send_mail_success_execution(recipient_mail, message, filename=None):
     print('Sending email...')
@@ -76,7 +71,3 @@ def send_mail_failure_execution(recipient_mail, message):
         print("Email sent")
     except Exception as e:
         print(e)
-
-
-if __name__ == "__main__":
-    main()

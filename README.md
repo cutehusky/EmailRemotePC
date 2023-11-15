@@ -14,7 +14,7 @@ __Available Commands:__
 5. `keylog` - Perform keylog for an amount of time
 6. `shutdown` - Turn off computer
 ## Requirements
-- [Python 3.10 or newer](https://www.python.org)
+- [Python 3.10 or newer](https://www.python.org/downloads/)
 - __OS__ : Windows
 - __Libraries:__
 
@@ -23,6 +23,8 @@ __Available Commands:__
     _- psutil_
 
     _- opencv-python_
+
+    _-customtkinter_
     
 **For first time run:** run _setup.py_ to install necessary packages
 

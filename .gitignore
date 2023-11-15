@@ -4,3 +4,6 @@ keylog_log
 screenshots
 webcam
 *.html
+output
+*.spec
+build

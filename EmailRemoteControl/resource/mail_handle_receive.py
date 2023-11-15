@@ -1,20 +1,14 @@
 import imaplib
 import email
-import variables
+try:
+    from resource.variables import *
+except ModuleNotFoundError:
+    from variables import *
 import re
-
-USER_EMAIL = variables.USER_EMAIL
-USER_PASSWORD = variables.USER_PASSWORD
-imap_address = variables.imap_address
-imap_port = variables.imap_port
-
-
-def main():
-    print(variables.USER_EMAIL)
 
 
 def login():
-    mail = imaplib.IMAP4_SSL(imap_address, imap_port)
+    mail = imaplib.IMAP4_TLS(imap_address, imap_port)
     print("Connected to gmail...")
     mail.login(USER_EMAIL, USER_PASSWORD)
     print("Logged in...")
@@ -59,7 +53,3 @@ def decode_mail(msg):
                     cmd_list.append(message)
                     print(message)
     return cmd_list  # one string or list of strings (unstripped)
-
-
-if __name__ == "__main__":
-    main()

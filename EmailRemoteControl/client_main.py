@@ -7,16 +7,25 @@ import resource.variables as variables
 
 smtp_host = variables.smtp_host
 smtp_port = variables.smtp_port
+imap_address = variables.imap_address
+imap_port = variables.imap_port
 USER_EMAIL = variables.CLIENT_EMAIL
 USER_PASSWORD = variables.CLIENT_PASSWORD
 recipient_mail = variables.USER_EMAIL
 
-cp = {
+dark_cp = {
     'bg': '#08122A',
     'fg': '#111931',
     'button_1': '#66A9A5',  # send
     'button_2': '#E36B6B',  # close/delete mail
 }
+
+light_cp = {
+    'bg': '#D3E1FC',
+    'fg': '#A1BBEE'  # close/delete mail
+}
+
+ctk.set_appearance_mode('light')
 
 
 class CheckboxFrame(ctk.CTkFrame):
@@ -24,7 +33,8 @@ class CheckboxFrame(ctk.CTkFrame):
         super().__init__(master)
         self.master = master
         self.grid_columnconfigure(0, weight=1)
-        self.configure(fg_color=cp['fg'], height=500, width=325)
+        self.configure(fg_color=(light_cp['fg'], dark_cp['fg']),
+                       height=500, width=325, corner_radius=6)
         self.commands = ['help',
                          'shutdown',
                          'kill_process',
@@ -42,129 +52,125 @@ class CheckboxFrame(ctk.CTkFrame):
                                 corner_radius=12
                                 ))
             self.checkboxes[i].grid(
-                row=i, column=0, padx=20, pady=10)
+                row=i, column=0, padx=20, pady=10, sticky='w')
 
         self.placeholder_text = 'Enter PID'
+        self.placeholder_text2 = 'Enter duration'
         self.entry = ctk.CTkEntry(
-            self, fg_color=cp['bg'], bg_color=cp['fg'], corner_radius=12)
+            self,
+            fg_color=(light_cp['bg'], dark_cp['bg']),
+            bg_color=(light_cp['fg'], dark_cp['fg']),
+            border_color=(light_cp['fg'], dark_cp['fg']),
+            corner_radius=12)
+        self.entry2 = ctk.CTkEntry(
+            self,
+            fg_color=(light_cp['bg'], dark_cp['bg']),
+            bg_color=(light_cp['fg'], dark_cp['fg']),
+            border_color=(light_cp['fg'], dark_cp['fg']),
+            corner_radius=12)
         self.entry.insert(0, self.placeholder_text)
+        self.entry2.insert(0, self.placeholder_text2)
         self.entry.bind('<FocusIn>', self.on_entry_focus_in)
+        self.entry2.bind('<FocusIn>', self.on_entry_focus_in)
         self.entry.bind('<FocusOut>', self.on_entry_focus_out)
+        self.entry2.bind('<FocusOut>', self.on_entry_focus_out)
         self.entry.grid(row=2, column=2, padx=20, pady=10)
+        self.entry.grid_columnconfigure(1, weight=1)
+        self.entry2.grid(row=5, column=2, padx=20, pady=10)
+        self.entry2.grid_columnconfigure(1, weight=1)
 
     def on_entry_focus_in(self, event):
         if self.entry.get() == self.placeholder_text:
             self.entry.delete(0, tk.END)
             self.entry.insert(0, '')
-            self.entry.configure(fg_color=cp['fg'])
 
     def on_entry_focus_out(self, event):
         if self.entry.get() == '':
             self.entry.insert(0, self.placeholder_text)
-            self.entry.configure(fg_color=cp['fg'])
+            self.entry.configure(fg_color=(light_cp['fg'], dark_cp['fg']))
+
+    def is_convertible_to_int(self, input_string):
+        try:
+            int(input_string)
+            return True
+        except ValueError:
+            return False
 
     def get(self):
         options = []
         for i, value in enumerate(self.checkboxes):
             if value.get() == 1:
                 if self.commands[i] == 'kill_process':
-                    text = self.entry.get()
+                    text = self.entry.get()  # Enter PID, need int only
+                    text = int(text) if self.is_convertible_to_int(
+                        text) else '0'
                     options.append(
                         self.checkboxes[i].cget('text') + ' ' + text)
+                elif self.commands[i] == 'keylog':
+                    text = self.entry2.get()  # Enter duration, convert to string
+                    text = int(text) if self.is_convertible_to_int(
+                        text) else '0'
+                    options.append(self.checkboxes[i].cget(
+                        'text') + ' ' + text)
                 else:
                     options.append(self.checkboxes[i].cget('text'))
         checked_options = '\n'.join(options)
         return checked_options
 
 
-class EmailFrame(ctk.CTkScrollableFrame):
-    def __init__(self, master):
-        super().__init__(master)
-        self.master = master
-        self.configure(fg_color=cp['fg'], width=325, height=350)
-        self.grid_columnconfigure(1, weight=1)
-
-        self.icon = ['◢', '◣', '◤', '◥']
-        self.index = 0
-
-        self.label = ctk.CTkLabel(
-            master=self,
-            text=''
-        )
-        self.label.grid(row=1, column=1, padx=10, pady=10, columnspan=1)
-        self.label.grid_columnconfigure(0, weight=1)
-
-        self.button = ctk.CTkButton(
-            master=self,
-            text='Start fetching',
-            fg_color=cp['button_1'],
-            text_color='black',
-            command=self.fetch
-        )
-        self.button.grid(row=0, column=1, padx=10, pady=10, columnspan=1)
-
-    def waiting(self):
-        self.label.configure(text=f'Fetching response {self.icon[self.index]}')
-        if self.index == len(self.icon) - 1:
-            self.index = 0
-        else:
-            self.index += 1
-
-    def fetch(self):
-        self.button.configure(state='disabled')
-        self.waiting()
-        self.after(200, self.fetch)
-
-    def get_mail(self):
-        pass
-
-
 class App(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("ERC - Client")
-        # self.geometry("740x540")
-        self.configure(fg_color=cp['bg'])
+        self.configure(fg_color=(light_cp['bg'], dark_cp['bg']))
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=1)
+        self.resizable(False, False)
 
+        # heading frame
+        self.heading_frame = ctk.CTkFrame(
+            self, fg_color=(light_cp['fg'], dark_cp['fg']), corner_radius=6)
+        self.heading_frame.grid(row=0, column=0, padx=10,
+                                pady=10, sticky='news')
+        self.heading_frame.grid_columnconfigure(0, weight=1)
         # label
         self.label = ctk.CTkLabel(
-            master=self,
-            text="Choose commands and click Send",
-            fg_color=cp['fg'],
-            corner_radius=6, height=60, width=325)
-        self.label.grid(row=0, column=0, padx=10, pady=10,
-                        columnspan=1, sticky='n')
-        self.label.grid_columnconfigure(0, weight=1)
-        # mail label
-        self.maillabel = ctk.CTkLabel(
-            master=self,
-            text="Incoming emails",
-            fg_color=cp['fg'],
-            corner_radius=6,
-            height=60, width=350)
-        self.maillabel.grid(row=0, column=1, padx=20,
-                            pady=10, columnspan=1, sticky='n')
-        self.maillabel.grid_columnconfigure(0, weight=1)
+            master=self.heading_frame,
+            text="Choose commands & Send",
+            fg_color='transparent',
+            font=("Arial", 13, "bold"),
+        )
+        self.label.grid(row=0, column=1, padx=20, pady=10,
+                        columnspan=1,
+                        sticky='e')
+        self.label.grid_columnconfigure(1, weight=1)
+        # switch theme button
+        self.switch_var = ctk.StringVar(value="light")
+        self.theme_switch = ctk.CTkSwitch(
+            master=self.heading_frame,
+            text="Dark",
+            font=("Arial", 13, "bold"),
+            command=self.toggle_mode,
+            variable=self.switch_var,
+            onvalue="light",
+            offvalue="dark")
+        self.theme_switch.grid(row=0, column=0, padx=10, pady=10, sticky='w')
+        self.theme_switch.grid_columnconfigure(0, weight=1)
 
         # checkbox frame
         self.checkboxFrame = CheckboxFrame(self)
         self.checkboxFrame.grid(row=1, column=0, padx=10, pady=10)
 
-        # email frame
-        self.emailFrame = EmailFrame(self)
-        self.emailFrame.grid(row=1, column=1, padx=10, pady=10)
-
         # send and close button frame
-        self.buttonFrame = ctk.CTkFrame(self, fg_color=cp['bg'])
+        self.buttonFrame = ctk.CTkFrame(
+            self, fg_color=(light_cp['fg'], dark_cp['fg']))
         self.buttonFrame.grid(row=2, column=0, padx=10, pady=10, columnspan=2)
         self.buttonFrame.grid_columnconfigure(0, weight=1)
         # send button
         self.button = ctk.CTkButton(
             master=self.buttonFrame,
             text="Send",
-            fg_color=cp['button_1'],
+            fg_color=dark_cp['button_1'],
             text_color='black',
             command=lambda: self.send(self.checkboxFrame.get()))
         self.button.grid(row=2, column=0, padx=10, pady=10)
@@ -173,11 +179,22 @@ class App(ctk.CTk):
         self.close_button = ctk.CTkButton(
             master=self.buttonFrame,
             text="Close",
-            fg_color=cp['button_2'],
+            fg_color=dark_cp['button_2'],
             text_color='black',
             command=self.destroy)
         self.close_button.grid(row=2, column=1, padx=10, pady=10)
         self.close_button.grid_columnconfigure(1, weight=1)
+
+    def reset_label(self):
+        self.label.configure(text="Choose commands & Send")
+
+    def toggle_mode(self):
+        if self.switch_var.get() == "light":
+            self.theme_switch.configure(text="Dark")  # light
+            ctk.set_appearance_mode("light")
+        else:
+            self.theme_switch.configure(text="Light")  # dark
+            ctk.set_appearance_mode("dark")
 
     def send(self, checked_options):
         global recipient_mail
@@ -186,11 +203,10 @@ class App(ctk.CTk):
         msg['To'] = recipient_mail
         msg['Subject'] = "Remote Control Command"
 
+        if (len(checked_options) == 0):
+            return
         # send plain text
         msg.attach(MIMEText(checked_options, 'plain'))
-        if (len(checked_options) == 0):
-            self.label.configure(text='Please choose at least one command!')
-            return
 
         try:
             server = smtplib.SMTP(smtp_host, smtp_port)
@@ -202,6 +218,7 @@ class App(ctk.CTk):
             self.label.configure(text="Email sent")
         except Exception as e:
             self.label.configure(text=e)
+        self.after(3000, self.reset_label)
 
 
 if __name__ == "__main__":
