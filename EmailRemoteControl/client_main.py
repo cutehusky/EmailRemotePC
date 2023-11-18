@@ -122,7 +122,7 @@ class App(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("ERC - Client")
-        self.geometry("360x540")
+        self.geometry("360x525")
         self.resizable(False, False)
         self.configure(fg_color=(light_cp['bg'], dark_cp['bg']))
         self.grid_columnconfigure(0, weight=1)
