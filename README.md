@@ -24,14 +24,11 @@ __Available Commands:__
 
     _- opencv-python_
 
-    _-customtkinter_
+    _- customtkinter_
     
-**For first time run:** run _setup.py_ to install necessary packages
+**For first time run:** run _setup/setup.bat_ to install necessary packages
 
     
 ## NOTE
-_Please allow keylogr.py on Windows Security settings as the system automatically detects this file as a thread_
+_Please allow keylogr.py on Windows Security settings as the system automatically detects this file as a threat_
 
-
-
-[ffmpeg.exe build](https://github.com/GyanD/codexffmpeg/releases/download/6.0/ffmpeg-6.0-essentials_build.zip)
