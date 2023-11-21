@@ -70,24 +70,30 @@ class CheckboxFrame(ctk.CTkFrame):
             corner_radius=12)
         self.entry.insert(0, self.placeholder_text)
         self.entry2.insert(0, self.placeholder_text2)
-        self.entry.bind('<FocusIn>', self.on_entry_focus_in)
-        self.entry2.bind('<FocusIn>', self.on_entry_focus_in)
-        self.entry.bind('<FocusOut>', self.on_entry_focus_out)
-        self.entry2.bind('<FocusOut>', self.on_entry_focus_out)
+
+        self.entry.bind('<FocusIn>', lambda event: self.on_entry_focus_in(
+            event, self.entry, self.placeholder_text))
+        self.entry2.bind('<FocusIn>', lambda event: self.on_entry_focus_in(
+            event, self.entry2, self.placeholder_text2))
+
+        self.entry.bind('<FocusOut>', lambda event: self.on_entry_focus_out(
+            event, self.entry, self.placeholder_text))
+        self.entry2.bind('<FocusOut>', lambda event: self.on_entry_focus_out(
+            event, self.entry2, self.placeholder_text2))
+
         self.entry.grid(row=2, column=2, padx=20, pady=10)
         self.entry.grid_columnconfigure(1, weight=1)
         self.entry2.grid(row=5, column=2, padx=20, pady=10)
         self.entry2.grid_columnconfigure(1, weight=1)
 
-    def on_entry_focus_in(self, event):
-        if self.entry.get() == self.placeholder_text:
-            self.entry.delete(0, tk.END)
-            self.entry.insert(0, '')
+    def on_entry_focus_in(self, event, entry, placeholder_text):
+        if entry.get() == placeholder_text:
+            entry.delete(0, tk.END)
+            entry.insert(0, '')
 
-    def on_entry_focus_out(self, event):
-        if self.entry.get() == '':
-            self.entry.insert(0, self.placeholder_text)
-            self.entry.configure(fg_color=(light_cp['fg'], dark_cp['fg']))
+    def on_entry_focus_out(self, event, entry, placeholder_text):
+        if entry.get() == '':
+            entry.insert(0, placeholder_text)
 
     def is_convertible_to_int(self, input_string):
         try:
