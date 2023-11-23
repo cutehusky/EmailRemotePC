@@ -1,3 +1,5 @@
+from email import encoders
+from email.mime.application import MIMEApplication
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -26,6 +28,17 @@ def send_mail_success_execution(recipient_mail, message, filename=None):
             img = MIMEImage(fp.read())
             img.add_header('Content-ID', '<image1>')
             msg.attach(img)
+    elif filename.lower().endswith('.mkv'):
+        crocpath = path.dirname(path.abspath(__file__)) + "\\croc.jpg"
+        with open(crocpath, 'rb') as fp:
+            img = MIMEImage(fp.read())
+            img.add_header('Content-ID', '<image1>')
+            msg.attach(img)
+        with open(filename, 'rb') as fp:
+            vd = MIMEApplication(fp.read())
+            encoders.encode_base64(vd)
+            vd.add_header('Content-Disposition', 'attachment; filename=' + filename)
+            msg.attach(vd)
     else:
         crocpath = path.dirname(path.abspath(__file__)) + "\\croc.jpg"
         with open(crocpath, 'rb') as fp:

