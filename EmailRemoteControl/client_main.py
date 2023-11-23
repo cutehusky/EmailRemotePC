@@ -108,13 +108,13 @@ class CheckboxFrame(ctk.CTkFrame):
             if value.get() == 1:
                 if self.commands[i] == 'kill_process':
                     text = self.entry.get()  # Enter PID, need int only
-                    text = int(text) if self.is_convertible_to_int(
-                        text) else '0'
+                    text = str(text) if self.is_convertible_to_int(
+                        text) else "0"
                     options.append(
                         self.checkboxes[i].cget('text') + ' ' + text)
                 elif self.commands[i] == 'keylog':
                     text = self.entry2.get()  # Enter duration, convert to string
-                    text = int(text) if self.is_convertible_to_int(
+                    text = str(text) if self.is_convertible_to_int(
                         text) else '0'
                     options.append(self.checkboxes[i].cget(
                         'text') + ' ' + text)
