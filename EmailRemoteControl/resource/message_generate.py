@@ -2,7 +2,7 @@
 def help():
     help_message = f'''\
 <html>
-        
+
     <body style="font-family: monospace;">
     <table width="100%" border="0" cellspacing="20" cellpadding="10" bgcolor="#022130"; style="font-size: 20px; border-radius: 22px; color: #60c0bb">
         <tr>
@@ -52,6 +52,12 @@ def help():
 
 def success_message(command):
     print(f'\nCommand executed successfully: {command}')
+    img_tag = ''
+    cmd_lst = ['screenshot', 'webcam']
+    for cmd in cmd_lst:
+        if command.startswith(cmd):
+            img_tag ="""<img style="display: block; margin: 0 auto; border-radius: 22px" src="cid:image1" alt="image1">"""
+            break
     message = f"""\
         <html>
     <body style="font-family: monospace;">
@@ -60,7 +66,7 @@ def success_message(command):
             <td>
             <h1 style="text-align: center;">COMMAND SUCCESSFULLY EXECUTED</h1>
             <h1 style="text-align: center;">{command}</h1>
-            <img style="display: block; margin: 0 auto; border-radius: 22px" src="cid:image1" alt="image1">
+            {img_tag}
             </td>
         </tr>
     </table>
@@ -71,7 +77,7 @@ def success_message(command):
 def failure_message(command):
     message = f"""\
 <html>
-        
+
     <body style="font-family: monospace;">
     <table width="100%" border="0" cellspacing="20" cellpadding="20" bgcolor="#022130" style="border-radius: 22px; color: #f1967f">
         <tr>
@@ -114,7 +120,7 @@ def DataFormat(data, command):
 """
     for key in categories.keys():
         message += f"<th style= \"padding: 5px\">{key}</th>\n"
-    message += "</tr>\n" # end of header row
+    message += "</tr>\n"  # end of header row
     for key in categories.keys():
         tmp = key
         break
@@ -137,7 +143,11 @@ def DataFormat(data, command):
     return message
 
 def main():
-    pass
+    res = success_message('shutdown')
+    res = success_message('kill_process')
+    print(res)
+    res = success_message('keylog')
+    res = success_message('screenshot')
     
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

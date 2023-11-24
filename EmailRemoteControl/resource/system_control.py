@@ -6,14 +6,14 @@ import datetime
 
 
 def main():
-    print(webcam_image())
+    countdown(10)
 
 
 def countdown(duration):
     while duration > 0:
         minutes, seconds = divmod(duration, 60)
         # \r = overwrite the previous line
-        print(f"Time remaining: {minutes: 02d}: {seconds: 02d}", end='\r')
+        print(f"Time remaining: {minutes:02d}:{seconds:02d}", end='\r')
         time.sleep(1)
         duration -= 1
 

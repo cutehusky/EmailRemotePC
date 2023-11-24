@@ -15,8 +15,7 @@ def list_processes():
         formatted_data += f"{process[0]} {process[1]} {process[2]}\n"
     return formatted_data
 
-def kill_process(cmd):
-    pid = int(cmd.split()[1])
+def kill_process(pid):
     process = psutil.Process(pid)
     process.kill()
     print(f'Process {pid} killed')

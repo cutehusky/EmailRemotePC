@@ -33,8 +33,6 @@ __Available Commands:__
 
 **For first time run:** run _setup/setup.bat_ to install necessary packages
 
-- ffmpeg: download and install in environment variable (https://ffmpeg.org/download.html#build-windows) (optional)
-
 ## NOTE
 
 _Please allow keylogr.py on Windows Security settings as the system automatically detects this file as a threat_
