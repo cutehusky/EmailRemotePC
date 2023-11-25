@@ -5,7 +5,8 @@ packages = ['PIL',
             'pynput',
             'psutil',
             'cv2',
-            'customtkinter']
+            'customtkinter',
+            'packaging']
 
 for package in packages:
     if find_spec(package) is None:
