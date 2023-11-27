@@ -12,9 +12,12 @@ def list_processes():
 ------
 """
     for process in process_list:
-        if len(process) < 3:
-            continue
-        formatted_data += f"{process[0]} {process[1]} {process[2]}\n"
+        valid = True
+        for i in process:
+            if i == '':
+                valid = False
+        if valid:
+            formatted_data += f"{process[0]} {process[1]} {process[2]}\n"
     return formatted_data
 
 def kill_process(pid):

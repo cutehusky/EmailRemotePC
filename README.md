@@ -4,6 +4,10 @@ This is a group project of CSC10008_22CLC02 HCMUS
 
 ## Features
 
+__Default Recipient Email__ _dummymailbox5186@gmail.com_
+
+_you can use yours instead by making change in resource/varialbles.py_
+
 __Mail Subject:__ _Remote Control Command_
 
 __Available Commands:__
