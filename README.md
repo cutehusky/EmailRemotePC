@@ -14,7 +14,7 @@ __Available Commands:__
 3. `kill_process <pid>` - Kill process with matching pid
 4. `screenshot` - Take a screenshot
 5. `webcam` - Take a picture using built-in webcam
-6. `keylog` - Perform keylog for an amount of time
+6. `keylog <duration>` - Perform keylog for an amount of time
 7. `shutdown` - Turn off computer
 
 ## Requirements
