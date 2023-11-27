@@ -12,6 +12,8 @@ def list_processes():
 ------
 """
     for process in process_list:
+        if len(process) < 3:
+            continue
         formatted_data += f"{process[0]} {process[1]} {process[2]}\n"
     return formatted_data
 
@@ -26,8 +28,6 @@ def getAppInfo():
 
 
 def main():
-    appinfo = getAppInfo()
-    print(appinfo)
-    kill_process('kill_process '+input("pid:"))
+    print(list_processes())
 if __name__ == "__main__":
     main()
