@@ -4,9 +4,11 @@ This is a group project of CSC10008_22CLC02 HCMUS
 
 ## Features
 
-__Default Recipient Email__ _dummymailbox5186@gmail.com_
+__Default Recipient Email:__ dummymailbox5186@gmail.com
 
-_you can use yours instead by making change in resource/varialbles.py_
+_You can use yours instead by making change in resource/variables.py. Please note that it requires **App password** and NOT your account password._
+
+[[How to get app password]](https://support.google.com/mail/answer/185833?hl=en)
 
 __Mail Subject:__ _Remote Control Command_
 
