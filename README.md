@@ -43,4 +43,5 @@ __Available Commands:__
 
 ## NOTE
 
-_Please allow keylogr.py on Windows Security settings as the system automatically detects this file as a threat_
+_Please exclude this folder from Windows Defender scans as the system automatically detects **resource/keylogr.py** as a threat_
+**[Instruction](https://support.microsoft.com/en-us/windows/add-an-exclusion-to-windows-security-811816c0-4dfd-af4a-47e4-c301afe13b26#:~:text=Go%20to%20Start%20>%20Settings%20>%20Update,%2C%20file%20types%2C%20or%20process.)**
